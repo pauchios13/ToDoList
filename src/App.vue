@@ -1,27 +1,32 @@
 <template>
-  <div id="app" class="container">
-    <h1 class="center-align">Mi To-Do</h1>
-
+  <div id="app">
     <div class="row">
-      <div class="input-field col s12 m8">
-        <input v-model="tituloLista" @keyup.enter="anadirLista" />
+      <div class="col s12">
+        <p class="flow-text center-align green-text">Mi gestor de tareas</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="input-field col s12">
+        <input v-model="tituloLista" placeholder="Escribe una lista" @keyup.enter="anadirLista" />
       </div>
 
-      <div class="col s12 m6 l3">
-        <button class="btn green waves-effect waves-light full-width" @click="anadirLista">
-          Añadir Lista
-        </button>
+      <div class="col s12">
+        <button class="btn green" @click="anadirLista" style="width: 100%">Añadir Lista</button>
       </div>
     </div>
 
-    <div class="row" v-for="(lista, index) in listas" :key="index">
-      <div class="col s12 m9">
-        <List :tituloLista="lista.title" :id="index" @eliminarLista="eliminarLista" />
+    <div class="row" v-for="(lista, index) in listas" :key="lista.id">
+      <div class="col s12">
+        <List
+          :tituloLista="lista.title"
+          :id="lista.id"
+          @eliminarLista="eliminarLista"
+          @actualizarListas="guardarListas"
+        />
       </div>
-      <div class="col s12 m3">
-        <button class="btn red waves-effect waves-light full-width" @click="eliminarLista(index)">
-          Eliminar lista
-        </button>
+
+      <div class="col s12">
+        <button class="btn red" @click="eliminarLista(lista.id)">Eliminar lista</button>
       </div>
     </div>
   </div>
@@ -54,6 +59,8 @@ export default {
       if (this.tituloLista.trim() !== '') {
         this.listas.push({
           title: this.tituloLista,
+          tareas: [],
+          id: Date.now(),
         })
         this.tituloLista = ''
         this.guardarListas()
@@ -62,8 +69,11 @@ export default {
       }
     },
 
-    eliminarLista(index) {
-      this.listas.splice(index, 1)
+    eliminarLista(id) {
+      localStorage.removeItem(`tareas-${id}`)
+
+      this.listas = this.listas.filter((lista) => lista.id !== id)
+
       this.guardarListas()
     },
 
@@ -73,8 +83,3 @@ export default {
   },
 }
 </script>
-<style scoped>
-.row {
-  margin-bottom: 20px;
-}
-</style>

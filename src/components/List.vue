@@ -1,8 +1,7 @@
 <template>
   <span class="titulo-lista">{{ tituloLista }}</span>
-
-  <div class="row tareas">
-    <div class="input-field col s12 m9">
+  <div class="row">
+    <div class="input-field col s12">
       <input
         type="text"
         v-model="tituloTarea"
@@ -10,16 +9,14 @@
         @keyup.enter="anadirTarea"
       />
     </div>
-    <div class="col s12 m3">
-      <button class="btn green waves-effect waves-light full-width" @click="anadirTarea">
-        Agregar Tarea
-      </button>
+    <div class="col s12">
+      <button class="btn green" @click="anadirTarea">Agregar Tarea</button>
     </div>
   </div>
 
   <div class="ListaTareas">
-    <div v-for="(tarea, index) in tareas" :key="tarea.id" class="section tarea-item">
-      <ListItem :tituloTarea="tarea" :id="index" @eliminarTarea="eliminarTarea" />
+    <div v-for="(tarea, id) in tareas" :key="tarea.id">
+      <ListItem :tituloTarea="tarea.titulo" :id="tarea.id" @eliminarTarea="eliminarTarea" />
     </div>
   </div>
 
@@ -54,14 +51,21 @@ export default {
   methods: {
     anadirTarea() {
       if (this.tituloTarea.trim() !== '') {
-        this.tareas.push(this.tituloTarea)
+        this.tareas.push({
+          titulo: this.tituloTarea,
+          id: Date.now(),
+        })
         this.tituloTarea = ''
-        this.modalTarea.open()
         this.guardarTareas()
+        this.modalVisible = true
+
+        const modal = document.getElementById('modalTarea')
+        const instance = M.Modal.init(modal)
+        instance.open()
       }
     },
-    eliminarTarea(index) {
-      this.tareas.splice(index, 1)
+    eliminarTarea(id) {
+      this.tareas = this.tareas.filter((tarea) => tarea.id !== id)
       this.guardarTareas()
     },
     guardarTareas() {
@@ -69,8 +73,6 @@ export default {
     },
   },
   mounted() {
-    const modalElem = document.getElementById('modalTarea')
-    this.modalTarea = M.Modal.init(modalElem)
     const tareasGuardadas = localStorage.getItem(`tareas-${this.id}`)
     if (tareasGuardadas) {
       this.tareas = JSON.parse(tareasGuardadas)
@@ -78,32 +80,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.titulo-lista {
-  display: block;
-  font-weight: bold;
-  color: #1565c0;
-  margin-bottom: 15px;
-  margin-top: 40px;
-}
-
-.tareas {
-  margin-bottom: 20px;
-}
-
-.full-width {
-  width: 100%;
-}
-
-.tarea-item {
-  background-color: #e2545400;
-  border-radius: 8px;
-  padding: 12px 16px;
-  margin-bottom: 10px;
-  border: 1px solid #e0e0e0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-</style>

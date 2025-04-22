@@ -13,7 +13,7 @@ export default {
   },
   methods: {
     eliminarTarea() {
-      this.$emit('eliminarTarea', this.index)
+      this.$emit('eliminarTarea', this.id)
     },
   },
 }
