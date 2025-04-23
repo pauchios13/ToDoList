@@ -14,19 +14,22 @@
         <button class="btn green" @click="anadirLista" style="width: 100%">Añadir Lista</button>
       </div>
     </div>
-
-    <div class="row" v-for="(lista, index) in listas" :key="lista.id">
-      <div class="col s12">
-        <List
-          :tituloLista="lista.title"
-          :id="lista.id"
-          @eliminarLista="eliminarLista"
-          @actualizarListas="guardarListas"
-        />
-      </div>
-
-      <div class="col s12">
-        <button class="btn red" @click="eliminarLista(lista.id)">Eliminar lista</button>
+  </div>
+  <div class="row" v-for="(lista, index) in listas" :key="lista.id">
+    <div class="col s12 m6 l4">
+      <div class="card yellow lighten-4 z-depth-2">
+        <div class="card-content">
+          <span class="card-title"></span>
+          <List
+            :tituloLista="lista.title"
+            :id="lista.id"
+            @eliminarLista="eliminarLista"
+            @actualizarListas="guardarListas"
+          />
+        </div>
+        <div class="card-action">
+          <button class="btn red" @click="eliminarLista(lista.id)">Eliminar lista</button>
+        </div>
       </div>
     </div>
   </div>

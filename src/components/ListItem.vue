@@ -1,9 +1,5 @@
 <template>
   {{ tituloTarea }}
-
-  <button class="btn red waves-effect waves-light eliminar-btn" @click="eliminarTarea">
-    Eliminar Tarea
-  </button>
 </template>
 <script>
 export default {

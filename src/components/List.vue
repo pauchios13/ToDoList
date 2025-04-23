@@ -15,8 +15,17 @@
   </div>
 
   <div class="ListaTareas">
-    <div v-for="(tarea, id) in tareas" :key="tarea.id">
-      <ListItem :tituloTarea="tarea.titulo" :id="tarea.id" @eliminarTarea="eliminarTarea" />
+    <div class="row">
+      <div class="col s12" v-for="(tarea, id) in tareas" :key="tarea.id">
+        <div class="card blue-grey lighten-5 z-depth-1">
+          <div class="card-action">
+            <ListItem :tituloTarea="tarea.titulo" :id="tarea.id" @eliminarTarea="eliminarTarea" />
+          </div>
+        </div>
+        <div class="left-align" style="margin-top: 4px; margin-bottom: 24px">
+          <button class="btn red" @click="eliminarTarea(tarea.id)">Eliminar tarea</button>
+        </div>
+      </div>
     </div>
   </div>
 
